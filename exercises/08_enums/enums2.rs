@@ -3,10 +3,19 @@ struct Point {
     x: u64,
     y: u64,
 }
-
+#[derive(Debug)]
+struct Rectangle{
+    width :u32,
+    height:u32,
+}
 #[derive(Debug)]
 enum Message {
     // TODO: Define the different variants used below.
+    Move(Point),
+    Resize{width:u32,height:u32},
+    Echo(String),
+    Quit,
+    ChangeColor(i32,i32,i32),
 }
 
 impl Message {

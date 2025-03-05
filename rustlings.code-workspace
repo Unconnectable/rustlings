@@ -1,0 +1,36 @@
+{
+  "folders": [
+    {
+      "path": "." // 当前目录（C:\Users\YourName\rustlings）
+      //当前目录D:\code\Courses\rustlings
+    }
+  ],
+  "settings": {
+    "rust-analyzer.checkOnSave": true,
+    "rust-analyzer.checkOnChange": false,
+    "rust-analyzer.cargo.features": "incremental",
+    "rust-analyzer.files.excludeDirs": [
+      "target"
+    ],
+    "rust-analyzer.linkedProjects": [
+      ".\\Cargo.toml" // Windows 路径
+    ],
+    "rust-analyzer.numThreads": 8, // 适中线程数，优化性能
+    "rust-analyzer.showDependenciesExplorer": false,
+    "rust-analyzer.restartServerOnConfigChange": true,
+    "rust-analyzer.initializeStopped": false,
+    "rust-analyzer.completion.enable": true,
+    "rust-analyzer.formatting.enable": true,
+    "rust-analyzer.diagnostics.enable": true,
+    "rust-analyzer.server.extraEnv": {
+      "RA_FEATURES": "lightweight"
+    },
+    "rust-analyzer.check.overrideCommand": [
+      "powershell.exe",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      ".\\check_modified.ps1" // Windows 路径
+    ]
+  }
+}
