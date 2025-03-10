@@ -21,6 +21,7 @@ foreach ($file in $modifiedFiles) {
             Output = $output
         }
     } -ArgumentList $file
+
     # 限制并行作业数
     while ((Get-Job -State Running).Count -ge $maxThreads) {
         Start-Sleep -Milliseconds 100
@@ -29,7 +30,7 @@ foreach ($file in $modifiedFiles) {
 
 # 等待所有作业完成并收集结果
 $results = $jobs | Wait-Job | Receive-Job
-Remove-Job -Job $jobs
+Remove-Job -Job $jobs -Force
 
 # 输出所有检查结果
 foreach ($result in $results) {

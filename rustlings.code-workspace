@@ -1,8 +1,7 @@
 {
   "folders": [
     {
-      "path": "." // 当前目录（C:\Users\YourName\rustlings）
-      //当前目录D:\code\Courses\rustlings
+      "path": "."
     }
   ],
   "settings": {
@@ -13,9 +12,9 @@
       "target"
     ],
     "rust-analyzer.linkedProjects": [
-      ".\\Cargo.toml" // Windows 路径
+      ".\\Cargo.toml"
     ],
-    "rust-analyzer.numThreads": 8, // 适中线程数，优化性能
+    "rust-analyzer.numThreads": 8,
     "rust-analyzer.showDependenciesExplorer": false,
     "rust-analyzer.restartServerOnConfigChange": true,
     "rust-analyzer.initializeStopped": false,
@@ -29,8 +28,9 @@
       "powershell.exe",
       "-ExecutionPolicy",
       "Bypass",
+      "-NoProfile", // 新增的关键参数：禁用 PowerShell 配置文件加载
       "-File",
-      ".\\check_modified.ps1" // Windows 路径
+      ".\\check_modified.ps1"
     ]
   }
 }

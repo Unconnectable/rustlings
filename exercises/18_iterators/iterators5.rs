@@ -27,7 +27,8 @@ fn count_for(map: &HashMap<String, Progress>, value: Progress) -> usize {
 // of a `for` loop.
 fn count_iterator(map: &HashMap<String, Progress>, value: Progress) -> usize {
     // `map` is a hash map with `String` keys and `Progress` values.
-    // map = { "variables1": Complete, "from_str": None, … }
+    //map = { "variables1": Complete, "from_str": None, … }
+    map.values().filter(|&v| *v==value).count()
 }
 
 fn count_collection_for(collection: &[HashMap<String, Progress>], value: Progress) -> usize {
@@ -48,6 +49,13 @@ fn count_collection_iterator(collection: &[HashMap<String, Progress>], value: Pr
     // `collection` is a slice of hash maps.
     // collection = [{ "variables1": Complete, "from_str": None, … },
     //               { "variables2": Complete, … }, … ]
+    collection
+        .iter()
+        .map(|key| count_iterator(key, value))
+        .sum()
+
+        //.flat_map(|map| map.values())
+        //.filter(|&v|*v==value).count()
 }
 
 fn main() {
@@ -110,20 +118,14 @@ mod tests {
         let map = get_map();
         let progress_states = [Progress::Complete, Progress::Some, Progress::None];
         for progress_state in progress_states {
-            assert_eq!(
-                count_for(&map, progress_state),
-                count_iterator(&map, progress_state),
-            );
+            assert_eq!(count_for(&map, progress_state), count_iterator(&map, progress_state));
         }
     }
 
     #[test]
     fn count_collection_complete() {
         let collection = get_vec_map();
-        assert_eq!(
-            count_collection_iterator(&collection, Progress::Complete),
-            6,
-        );
+        assert_eq!(count_collection_iterator(&collection, Progress::Complete), 6);
     }
 
     #[test]
@@ -146,7 +148,7 @@ mod tests {
         for progress_state in progress_states {
             assert_eq!(
                 count_collection_for(&collection, progress_state),
-                count_collection_iterator(&collection, progress_state),
+                count_collection_iterator(&collection, progress_state)
             );
         }
     }

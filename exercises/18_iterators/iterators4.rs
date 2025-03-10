@@ -10,6 +10,11 @@ fn factorial(num: u64) -> u64 {
     // - additional variables
     // For an extra challenge, don't use:
     // - recursion
+    //let sum = numbers.iter().fold(0, |acc, &x| acc + x);
+    // 使用范围迭代器生成 Vec（动态数组）
+    let num_: Vec<u64> = (2..=num).collect(); // 包含 10 需要等号 =
+    let prod: u64 = num_.iter().fold(1,|acc,&x| acc * x);
+    prod
 }
 
 fn main() {
