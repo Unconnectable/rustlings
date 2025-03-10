@@ -1,4 +1,26 @@
+# Rust
+/target/
 Cargo.lock
-target/
-.vscode/
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
 rustlings.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+*.iml
+*.swp
+*.swo
+
+# Local environment
+.env
+
+# Logs
+*.log
