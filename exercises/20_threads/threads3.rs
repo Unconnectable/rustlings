@@ -17,10 +17,20 @@ impl Queue {
 fn send_tx(q: Queue, tx: mpsc::Sender<u32>) {
     // TODO: We want to send `tx` to both threads. But currently, it is moved
     // into the first thread. How could you solve this problem?
+
+    /*
+    move occurs
+    value used here after move
+
+    问题是第一段已经移动了tx
+    第二段无法移动
+    需要一个tx的clone
+    */
+    let _tx1 = tx.clone();
     thread::spawn(move || {
         for val in q.first_half {
             println!("Sending {val:?}");
-            tx.send(val).unwrap();
+            _tx1.send(val).unwrap();
             thread::sleep(Duration::from_millis(250));
         }
     });
