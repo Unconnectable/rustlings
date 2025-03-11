@@ -5,7 +5,7 @@
 // https://doc.rust-lang.org/std/convert/trait.TryFrom.html
 
 #![allow(clippy::useless_vec)]
-use std::convert::{TryFrom, TryInto};
+use std::convert::{ TryFrom, TryInto };
 
 #[derive(Debug, PartialEq)]
 struct Color {
@@ -28,14 +28,66 @@ enum IntoColorError {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
 
-    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {}
+    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        /* 
+        let (r, g, b) = tuple;
+         if !(0..255).contains(&r) || !(0..255).contains(&g) || !(0..255).contains(&b) {
+            return Err(IntoColorError::IntConversion);
+        }
+        return Ok(Self {
+            red: r as u8,
+            green: g as u8,
+            blue: b as u8,
+        });
+        */
+
+        let (Ok(red), Ok(green), Ok(blue)) = (
+            u8::try_from(tuple.0),
+            u8::try_from(tuple.1),
+            u8::try_from(tuple.2),
+        ) else {
+            return Err(IntoColorError::IntConversion);
+        };
+        Ok(Self { red, green, blue })
+        /*
+        使用try_from
+        let (Ok(red), Ok(green), Ok(blue)) = (
+            u8::try_from(tuple.0),
+            u8::try_from(tuple.1),
+            u8::try_from(tuple.2),
+        ) else {
+            return Err(IntoColorError::IntConversion);
+        };
+
+        Ok(Self { red, green, blue })
+
+        */
+    }
 }
 
 // TODO: Array implementation.
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
 
-    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {}
+    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        //fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        /*
+        let r = arr[0];
+        let g = arr[1];
+        let b = arr[2];
+
+        if !(0..255).contains(&r) || !(0..255).contains(&g) || !(0..255).contains(&b) {
+            return Err(IntoColorError::IntConversion);
+        }
+        Ok(Self {
+            red: r as u8,
+            green: g as u8,
+            blue: b as u8,
+        })
+        */
+
+        Self::try_from((arr[0], arr[1], arr[2]))
+    }
 }
 
 // TODO: Slice implementation.
@@ -43,7 +95,27 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
 
-    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {}
+    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() != 3 {
+            return Err(IntoColorError::BadLen);
+        }
+        /* 
+        //以下是远古土包子写法QAQ
+        let r = slice[0];
+        let g = slice[1];
+        let b = slice[2];
+
+        if !(0..255).contains(&r) || !(0..255).contains(&g) || !(0..255).contains(&b) {
+            return Err(IntoColorError::IntConversion);
+        }
+        Ok(Self {
+            red: r as u8,
+            green: g as u8,
+            blue: b as u8,
+        })
+        */
+        Self::try_from((slice[0], slice[1], slice[2]))
+    }
 }
 
 fn main() {
@@ -88,14 +160,11 @@ mod tests {
     fn test_tuple_correct() {
         let c: Result<Color, _> = (183, 65, 14).try_into();
         assert!(c.is_ok());
-        assert_eq!(
-            c.unwrap(),
-            Color {
-                red: 183,
-                green: 65,
-                blue: 14,
-            }
-        );
+        assert_eq!(c.unwrap(), Color {
+            red: 183,
+            green: 65,
+            blue: 14,
+        });
     }
 
     #[test]
@@ -120,14 +189,11 @@ mod tests {
     fn test_array_correct() {
         let c: Result<Color, _> = [183, 65, 14].try_into();
         assert!(c.is_ok());
-        assert_eq!(
-            c.unwrap(),
-            Color {
-                red: 183,
-                green: 65,
-                blue: 14
-            }
-        );
+        assert_eq!(c.unwrap(), Color {
+            red: 183,
+            green: 65,
+            blue: 14,
+        });
     }
 
     #[test]
@@ -153,14 +219,11 @@ mod tests {
         let v = vec![183, 65, 14];
         let c: Result<Color, _> = Color::try_from(&v[..]);
         assert!(c.is_ok());
-        assert_eq!(
-            c.unwrap(),
-            Color {
-                red: 183,
-                green: 65,
-                blue: 14,
-            }
-        );
+        assert_eq!(c.unwrap(), Color {
+            red: 183,
+            green: 65,
+            blue: 14,
+        });
     }
 
     #[test]
